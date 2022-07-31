@@ -96,13 +96,21 @@ public class TaskService implements TaskServiceInterface {
 
         task.setId(id);
         task.setUpdated(Instant.now());
+        if (task.getIdColumn() == 3 ){
+            task.setDeliveryDate(Instant.now());
+        }
+
+
         var a = taskRepository.save(task);
 
 
         Integer idTask = a.getId();
         Integer idColumnTask = a.getIdColumn();
 
+
+
         LogDomain logdomain = new LogDomain();
+
 
         logdomain.setIdTask(idTask.toString());
         logdomain.setIdCurrent(idColumnTask.toString());

@@ -80,7 +80,7 @@ public class TaskDomain implements Serializable {
     private String description;
 
     @Column(name="tsk_delivery_date")
-    private Date deliveryDate;
+    private Instant deliveryDate;
 
     @Column(name="tsk_created_at")
     private Instant create;
