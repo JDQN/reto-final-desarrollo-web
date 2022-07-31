@@ -12,8 +12,6 @@ export class TablerosView {
     }
 
     init(tableros) {
-
-        const description = new TablerosController();
         var card = this.#privateMenuCrearTableros();
         this.#privateBody.append(card);
 
@@ -27,7 +25,7 @@ export class TablerosView {
     }
 
     #privateMenuCrearTableros(){
-        const description = new TablerosController();
+        const controlador = new TablerosController();
         
         const card = this.#privateCreateCard();
         const title = this.#privateCreateTitle();
@@ -47,8 +45,7 @@ export class TablerosView {
         const buttonCreate = document.createElement('a');
         buttonCreate.classList.add('btn', 'btn-primary', 'd-grid', 'gap-2', 'col-9', 'mx-auto');
         buttonCreate.textContent = 'Crear Tablero';
-        //buttonCreate.href = Config.FrontendURL+"/"+option+"Update.html?id="+id;
-        buttonCreate.addEventListener("click",() => {const text = document.getElementById("create").value; description.create(text); })
+        buttonCreate.addEventListener("click",() => {const text = document.getElementById("create").value; controlador.create(text); })
 
         card.append(title,input,buttonCreate);
 
@@ -57,6 +54,8 @@ export class TablerosView {
     }
 
     #privateMostrarTableros(tablero){
+        const controlador = new TablerosController();
+
         const card = this.#privateCreateCard();
         card.id = tablero.Id;
 
@@ -84,14 +83,14 @@ export class TablerosView {
         const buttonEditar = this.#privateCreateButton();
         buttonEditar.classList.add('btn', 'btn-outline-primary');
         buttonEditar.textContent = 'Editar';
-        buttonEditar.addEventListener("click",() => {const text = document.getElementById("editar"+tablero.Id).value; description.editar(text,tablero.Id); })
+        buttonEditar.addEventListener("click",() => {const text = document.getElementById("editar"+tablero.Id).value; controlador.editar(text,tablero.Id); })
 
 
         /* Boton Elimianr tablero */
         const buttonEliminar = this.#privateCreateButton();
         buttonEliminar.classList.add('btn', 'btn-outline-danger');
         buttonEliminar.textContent = 'Eliminar';
-        buttonEliminar.addEventListener("click",() => { description.delete(tablero.Id); })
+        buttonEliminar.addEventListener("click",() => { controlador.delete(tablero.Id); })
 
         
         container.append(buttonAbrir, buttonEditar, buttonEliminar);

@@ -34,8 +34,15 @@ export class TableroDentroController {
     async delete(id){
         const servicio = new TableroDentroService(this.#privateApiyURL);
         await servicio.deleteTask(id);
-        alert("Tarea Eliminada correctamente");
-        window.location.reload();
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Tarea eliminada correctamente',
+            showConfirmButton: false,
+            timer: 1500
+        }).then(() => {
+            window.location.reload()
+        })
 
     }
     async create(nombreTarea,descripcion,idTablero,idColumna){
@@ -48,14 +55,14 @@ export class TableroDentroController {
             )
         }else{
             const servicio = new TableroDentroService(this.#privateApiyURL);
-            let nombre = {
+            let data = {
                 "idColumn":idColumna,
                 "idBoard":idTablero,
                 "name":nombreTarea,
                 "description":descripcion,
                 "create": new Date().toISOString()
             };
-            await servicio.createTask(nombre);
+            await servicio.createTask(data);
         
 
             Swal.fire({
@@ -73,14 +80,14 @@ export class TableroDentroController {
     async mover(idColumn,idTablero,name,descripcion,fechaCreacion,id){
         const servicio = new TableroDentroService(this.#privateApiyURL);
 
-        let nombre = {
+        let data = {
             "idColumn":idColumn,
             "idBoard":idTablero,
             "name":name,
             "description":descripcion,
             "create": fechaCreacion
         };
-        await servicio.editarTarea(nombre,id);
+        await servicio.editarTarea(data,id);
     
         const movimiento = idColumn == 1 || idColumn == 2 || idColumn == 3;
         if(movimiento){
@@ -98,14 +105,14 @@ export class TableroDentroController {
 
     async updateTarea (idColumn,idTablero,name,descripcion,fechaCreacion,id){
         const servicio = new TableroDentroService(this.#privateApiyURL);
-        let nombre = {
+        let data = {
             "idColumn":idColumn,
             "idBoard":idTablero,
             "name":name,
             "description":descripcion,
             "create": fechaCreacion
         };
-        await servicio.editarTarea(nombre,id);
+        await servicio.editarTarea(data,id);
         Swal.fire({
             position: 'top-end',
             icon: 'success',

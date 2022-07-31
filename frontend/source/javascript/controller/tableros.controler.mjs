@@ -37,8 +37,8 @@ export class TablerosController {
             )
         }else{
             const servicio = new TablerosService(this.#privateApiyURL);
-            let nombre = { "name":text,"createdAt": new Date().toISOString() };
-            await servicio.create(nombre);
+            let data = { "name":text,"createdAt": new Date().toISOString() };
+            await servicio.create(data);
 
             Swal.fire({
                 position: 'top-end',
@@ -55,7 +55,15 @@ export class TablerosController {
     async delete(id){
         const servicio = new TablerosService(this.#privateApiyURL);
         await servicio.delete(id);
-        window.location.reload();
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            text: 'Tablero eliminado correctamente',
+            showConfirmButton: false,
+            timer: 1500
+        }).then(() => {
+            window.location.reload()
+        })
         
     }
 
@@ -68,10 +76,10 @@ export class TablerosController {
             )
         }else{
             const servicio = new TablerosService(this.#privateApiyURL);
-            let nombre = {"name":text,
-            
-            "updatedAt":  new Date().toISOString()};
-            await servicio.editar(nombre,id);
+            let data = {"name":text,
+                "updatedAt":  new Date().toISOString()
+            };
+            await servicio.editar(data,id);
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',

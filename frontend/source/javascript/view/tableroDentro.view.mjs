@@ -16,7 +16,7 @@ export class TableroDentroView {
      * @param {} tableros 
      */
     init(columnas,tasks,idTablero) {
-        const description = new TableroDentroController();
+        const controlador = new TableroDentroController();
 
         var numeroColumnas = columnas.length;
         this.#privateMostroarColumnas(columnas,idTablero);
@@ -45,7 +45,7 @@ export class TableroDentroView {
             const buttonEliminar = this.#privateCreateButton();
             buttonEliminar.classList.add('btn', 'btn-danger');
             buttonEliminar.innerHTML = `<i class="bi bi-trash"></i>`;
-            buttonEliminar.addEventListener("click",() => {description.delete(task.Id);});
+            buttonEliminar.addEventListener("click",() => {controlador.delete(task.Id);});
 
 
             this.#privateMoverTarea(divBotones,buttonAbrir,buttonEliminar,task,idColumn,idTablero,numeroColumnas);
@@ -63,7 +63,7 @@ export class TableroDentroView {
             const div = document.createElement("section");
             div.classList.add("columnasTask");
 
-            div.id = element.Id;//element.Name.replace(' ','');
+            div.id = element.Id;
 
             const titulo = document.createElement("h3");
             titulo.textContent =  element.Name;
