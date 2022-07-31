@@ -11,7 +11,7 @@ import java.util.List;
 public interface LogServiceInterface {
 
     public List<LogDomain>  logByIdTask(String idTask);
-    public  LogDomain findById(Integer id);  // prueba
+    public  LogDomain findById(Integer id);
     public LogDomain create(LogDomain log);
     public LogDomain delete(Integer id);
 

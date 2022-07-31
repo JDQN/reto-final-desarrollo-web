@@ -92,7 +92,7 @@ public class ColumnDomain implements Serializable {
     /**
      * @Column es una anotación que indica el nombre de la columna en la base de datos.
      */
-    @OneToMany(fetch = FetchType.LAZY, targetEntity = LogDomain.class, /*cascade = CascadeType.REMOVE,*/ mappedBy = "current")
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = LogDomain.class,mappedBy = "current")
     @JsonManagedReference(value = "logCurrent")
     @JsonIgnore
     private List<LogDomain> logCurrent = new ArrayList<>();
@@ -110,10 +110,8 @@ public class ColumnDomain implements Serializable {
     /**
      * @Column es una anotación que indica el nombre de la columna en la base de datos.
      */
-    @OneToMany(fetch = FetchType.LAZY, targetEntity = TaskDomain.class /*,cascade = CascadeType.REMOVE*/, mappedBy = "columnTask")
-    //@JsonManagedReference(value = "taskForColumn")
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = TaskDomain.class, mappedBy = "columnTask")
     @JsonBackReference(value = "taskForColumn")
-    //@JsonIgnore
     private List<TaskDomain> task = new ArrayList<>();
 
 }

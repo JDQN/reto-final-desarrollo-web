@@ -1,9 +1,12 @@
 package org.sofka.mykrello.model.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.sofka.mykrello.controller.domain.BoardDomain;
 import org.sofka.mykrello.controller.domain.ColumnForBoardDomain;
+import org.sofka.mykrello.controller.domain.LogDomain;
+import org.sofka.mykrello.controller.domain.TaskDomain;
 import org.sofka.mykrello.model.repository.*;
 import org.sofka.mykrello.model.service.interfaces.BoardServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +53,7 @@ public class BoardService implements BoardServiceInterface {
     @Override
     @Transactional(readOnly = true)
     public BoardDomain findById(Integer id) {
-        var board = boardRepository.findById(id);
+        Optional<BoardDomain> board = boardRepository.findById(id);
         return board.isPresent() ? board.get() : null;
     }
 
@@ -99,28 +102,25 @@ public class BoardService implements BoardServiceInterface {
     @Transactional
     public BoardDomain delete(Integer id) {
 
-        var c = taskRepository.findByIdBoard(id);
+        List<TaskDomain> listTask = taskRepository.findByIdBoard(id);
 
-        for(Integer i = 0; i < c.size(); i++) {
-            var idTask = c.get(i).getId();
-            //TaskService task = new TaskService();
-            //task.delete(idTask);
+        for(Integer i = 0; i < listTask.size(); i++) {
+            Integer idTask = listTask.get(i).getId();
 
-            var taskDomain = taskRepository.findById(idTask);
-            var a = logRepository.findByIdLogbytask(idTask.toString());
+            Optional<TaskDomain> taskDomain = taskRepository.findById(idTask);
+            List<LogDomain> listLog = logRepository.findByIdLogbytask(idTask.toString());
 
-            for(Integer j = 0; j < a.size(); j++) {
-                var idLog = a.get(j).getId();
+            for(Integer j = 0; j < listLog.size(); j++) {
+                Integer idLog = listLog.get(j).getId();
                 logRepository.deleteById(idLog);
             }
             taskRepository.deleteById(idTask);
         }
 
-        var optionalBoard = boardRepository.findById(id);
+        Optional<BoardDomain> optionalBoard = boardRepository.findById(id);
         if (optionalBoard.isPresent()) {
-            var board = optionalBoard.get();
-            var columnsForBoard = board.getColumnsForBoard();
-           // BorrarTareas (board.getTask());
+            BoardDomain board = optionalBoard.get();
+            List<ColumnForBoardDomain> columnsForBoard = board.getColumnsForBoard();
             if (!columnsForBoard.isEmpty()) {
                 columnsForBoard.forEach((column) -> {
                     columnForBoardRepository.delete(column);

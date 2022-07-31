@@ -25,13 +25,13 @@ public class ColumnService implements ColumnServiceInterface {
 
     /**
      * ColumnOutDomain es una clase que representa una columna de la base de datos.
-     * @param columnDomain es una clase que representa una columna de la base de datos.
+     *  una clase que representa una columna de la base de datos.
      * @return  ListColumnOutDomain es una lista de ColumnOutDomain.
      */
     @Override
     public List<ColumnOutDomain> findAll() {
-      List<ColumnDomain> infoColumnas = columnRepository.findAll();
-      List<ColumnOutDomain> ListColumnOutDomain = new ArrayList<>();
+        List<ColumnDomain> infoColumnas = columnRepository.findAll();
+        List<ColumnOutDomain> ListColumnOutDomain = new ArrayList<>();
 
         for(Integer i = 0; i<infoColumnas.size(); i++ ){
             ColumnOutDomain columnOutDomain = new ColumnOutDomain();

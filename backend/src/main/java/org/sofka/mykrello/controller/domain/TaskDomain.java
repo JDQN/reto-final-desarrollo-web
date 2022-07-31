@@ -50,16 +50,11 @@ public class TaskDomain implements Serializable {
     private ColumnDomain columnTask; // tipo de clase dentro de springboot
 
 
-   @ManyToOne(targetEntity = BoardDomain.class, optional = false, /*cascade = CascadeType.REMOVE,*/ fetch = FetchType.EAGER)
+   @ManyToOne(targetEntity = BoardDomain.class, optional = false, fetch = FetchType.EAGER)
     @JsonManagedReference(value = "taskForBoard")
     @JsonIgnore
     @JoinColumn( name = "brd_id_board", insertable =false, updatable=false)
     private BoardDomain boardTask;
-
-    //@OneToMany(fetch = FetchType.EAGER /*LAZY*/, targetEntity = LogDomain.class, cascade = CascadeType.REMOVE, mappedBy = "taskLog")
-    //@JsonBackReference(value ="logForTask")
-    //private List<LogDomain> log = new ArrayList<>();
-
 
     /**
      * @Column indica que la propiedad es una columna de la tabla.

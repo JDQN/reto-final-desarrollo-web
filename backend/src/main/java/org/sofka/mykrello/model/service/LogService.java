@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service //@Service indica que esta clase es un servicio
 
@@ -21,7 +22,7 @@ public class LogService implements LogServiceInterface {
 
 
     public List<LogDomain> logByIdTask(String idTask){
-        var log = logRepository.findByIdLogbytask(idTask);
+        List<LogDomain> log = logRepository.findByIdLogbytask(idTask);
         return log;
     }
 
@@ -34,8 +35,8 @@ public class LogService implements LogServiceInterface {
      */
     @Override
     public LogDomain findById(Integer id) {
-        var a = logRepository.findById(id);
-        return a.get();
+        Optional<LogDomain> log = logRepository.findById(id);
+        return log.get();
     }
 
     /**
@@ -46,16 +47,14 @@ public class LogService implements LogServiceInterface {
      */
     @Override
     public LogDomain create(LogDomain log) {
-        var logDomain = logRepository.save(log);
+        LogDomain logDomain = logRepository.save(log);
         return logDomain;
     }
 
     @Override
     public LogDomain delete(Integer id) {
-        var logDomain = logRepository.findById(id);
+        Optional<LogDomain> logDomain = logRepository.findById(id);
         logRepository.delete(logDomain.get());
-
-
         return logDomain.get();
     }
 

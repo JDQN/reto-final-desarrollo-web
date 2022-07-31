@@ -66,7 +66,7 @@ public class ColumnForBoardDomain implements Serializable {
     private BoardDomain board;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = ColumnDomain.class, optional = false /*,cascade = CascadeType.*/)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = ColumnDomain.class, optional = false )
     @JoinColumn(name = "clm_id_column", nullable = false)
     @JsonBackReference(value = "columnForBoards")
     private ColumnDomain column;

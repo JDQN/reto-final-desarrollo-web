@@ -3,6 +3,7 @@ package org.sofka.mykrello.model.service;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.LongFunction;
 
 import org.sofka.mykrello.controller.domain.LogDomain;
 import org.sofka.mykrello.controller.domain.TaskDomain;
@@ -23,7 +24,7 @@ public class TaskService implements TaskServiceInterface {
 
     @Autowired
     private TaskRepository taskRepository;
-@Autowired
+    @Autowired
      private LogRepository logRepository;
     @Autowired
     private LogService logService;
@@ -37,7 +38,7 @@ public class TaskService implements TaskServiceInterface {
      */
     @Override//@Override indica que esta funcion es una sobreescritura de la funcion de la interfaz TaskServiceInterface
     public List<TaskDomain> taskByIdBoard(Integer idBoard) {
-        var tarea = taskRepository.findByIdBoard(idBoard);
+        List<TaskDomain> tarea = taskRepository.findByIdBoard(idBoard);
         return tarea;
     }
 
@@ -64,13 +65,12 @@ public class TaskService implements TaskServiceInterface {
      */
     @Override
     public TaskDomain create(TaskDomain task) {
-        var a = taskRepository.save(task);
+        TaskDomain taskNew = taskRepository.save(task);
 
-        Integer idTask = a.getId();
-        Integer idColumnTask = a.getIdColumn();
+        Integer idTask = taskNew.getId();
+        Integer idColumnTask = taskNew.getIdColumn();
 
         LogDomain logdomain = new LogDomain();
-
         logdomain.setIdTask(idTask.toString());
         logdomain.setIdCurrent(idColumnTask.toString());
         logdomain.setIdPrevious(idColumnTask.toString());
@@ -78,7 +78,7 @@ public class TaskService implements TaskServiceInterface {
 
         logRepository.save(logdomain);
 
-       return a;
+        return taskNew;
     }
 
 
@@ -91,7 +91,7 @@ public class TaskService implements TaskServiceInterface {
     @Override
     public TaskDomain update(Integer id, TaskDomain task) {
 
-        var taskPrevius = taskRepository.findById(id);
+        Optional<TaskDomain> taskPrevius = taskRepository.findById(id);
         Integer columnPrevius = taskPrevius.get().getIdColumn();
 
         task.setId(id);
@@ -99,19 +99,11 @@ public class TaskService implements TaskServiceInterface {
         if (task.getIdColumn() == 3 ){
             task.setDeliveryDate(Instant.now());
         }
-
-
-        var a = taskRepository.save(task);
-
-
-        Integer idTask = a.getId();
-        Integer idColumnTask = a.getIdColumn();
-
-
+        TaskDomain taskNew = taskRepository.save(task);
+        Integer idTask = taskNew.getId();
+        Integer idColumnTask = taskNew.getIdColumn();
 
         LogDomain logdomain = new LogDomain();
-
-
         logdomain.setIdTask(idTask.toString());
         logdomain.setIdCurrent(idColumnTask.toString());
         logdomain.setIdPrevious(columnPrevius.toString());
@@ -119,7 +111,7 @@ public class TaskService implements TaskServiceInterface {
 
         logRepository.save(logdomain);
 
-        return a;
+        return taskNew;
     }
 
 
@@ -132,17 +124,13 @@ public class TaskService implements TaskServiceInterface {
     @Override
     public TaskDomain delete(Integer id) {
         try {
-            var taskDomain = taskRepository.findById(id);
-            var a = logRepository.findByIdLogbytask(id.toString());
+            Optional<TaskDomain> taskDomain = taskRepository.findById(id);
+            List<LogDomain> listLog = logRepository.findByIdLogbytask(id.toString());
 
-            for(Integer i = 0; i < a.size(); i++) {
-                var idLog = a.get(i).getId();
+            for(Integer i = 0; i < listLog.size(); i++) {
+                var idLog = listLog.get(i).getId();
                 logRepository.deleteById(idLog);
-
-
             }
-
-
             taskRepository.deleteById(id);
             return taskDomain.get();
         }catch (Exception e) {

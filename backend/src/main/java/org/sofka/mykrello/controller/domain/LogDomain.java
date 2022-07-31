@@ -50,23 +50,16 @@ public class LogDomain implements Serializable {
      * @JsonBackReference indica que la clase no se serializará.
      * value="logPrevious" indica que la clase se serializará como logPrevious.
      */
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = ColumnDomain.class, optional = false/*, cascade = CascadeType.REMOVE *//*,cascade = CascadeType.REMOVE*/)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = ColumnDomain.class, optional = false)
     @JoinColumn(name = "clm_id_previous",  updatable = false, insertable = false)
     @JsonBackReference(value = "logPrevious")
     private ColumnDomain previous;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = ColumnDomain.class, optional = false/*,cascade = CascadeType.REMOVE*/)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = ColumnDomain.class, optional = false)
     @JoinColumn(name = "clm_id_current", updatable = false, insertable = false)
     @JsonBackReference(value = "logCurrent")
     private ColumnDomain current;
-
-   // @ManyToOne(targetEntity = TaskDomain.class, optional = false/*, cascade = CascadeType.REMOVE*/, fetch = FetchType.EAGER)
-    //@JsonManagedReference(value = "logForTask")
-    //@JsonIgnore
-    //@JoinColumn( name = "tsk_id_task", insertable =false, updatable=false)
-     //private TaskDomain taskLog;
-
 
     /**
      * @Column indica que la columna es una columna de la tabla.
