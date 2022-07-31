@@ -90,8 +90,27 @@ public class TaskService implements TaskServiceInterface {
      */
     @Override
     public TaskDomain update(Integer id, TaskDomain task) {
+
+        var taskPrevius = taskRepository.findById(id);
+        Integer columnPrevius = taskPrevius.get().getIdColumn();
+
         task.setId(id);
+        task.setUpdated(Instant.now());
         var a = taskRepository.save(task);
+
+
+        Integer idTask = a.getId();
+        Integer idColumnTask = a.getIdColumn();
+
+        LogDomain logdomain = new LogDomain();
+
+        logdomain.setIdTask(idTask.toString());
+        logdomain.setIdCurrent(idColumnTask.toString());
+        logdomain.setIdPrevious(columnPrevius.toString());
+        logdomain.setCreatedAt(Instant.now());
+
+        logRepository.save(logdomain);
+
         return a;
     }
 
@@ -124,3 +143,4 @@ public class TaskService implements TaskServiceInterface {
         }
     }
 }
+

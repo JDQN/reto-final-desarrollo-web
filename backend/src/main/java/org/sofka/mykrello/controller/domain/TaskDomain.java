@@ -86,6 +86,6 @@ public class TaskDomain implements Serializable {
     private Instant create;
 
     @Column(name="tsk_updated_at")
-    private Date updated;
+    private Instant updated;
 
 }
