@@ -74,7 +74,7 @@ public class TaskController {
         try {
             response.data = taskService.delete(id);
         }catch (Exception e){
-            Integer x = 0;
+            Integer x =0;
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
 

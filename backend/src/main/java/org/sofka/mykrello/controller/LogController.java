@@ -52,22 +52,12 @@ public class LogController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }*/
 
-<<<<<<< HEAD
    @DeleteMapping(path = "/api/v1/log/{id}")
     public ResponseEntity<MyResponseUtility> delete(@PathVariable(value = "id") Integer id) {
        response.data = logService.delete(id);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-=======
-    /*
-   @DeleteMapping(path = "/api/v1/log/{id}")
-    public ResponseEntity<MyResponseUtility> delete(@PathVariable(value = "id") Integer id) {
-        response.data = logService.delete(id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-    */
->>>>>>> 56b5f81bf9da1c914458f1b01978c2a4d8ae7d62
 
     /* @GetMapping(path = "/api/v1/log")
     public ResponseEntity<MyResponseUtility> index() {

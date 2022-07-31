@@ -24,18 +24,22 @@ export class TableroDentroController {
         
         const servicio = new TablerosService(this.#privateApiyURL);
         const tableros = await servicio.getColumnNames();
-        var idTablero = 2;
+        var ga = location.search;
+        debugger;
+        var id = ga.replace('?id=','');
+        var idTablero = id;
         const tasks = await servicio.getTaskFoBoard(idTablero);
         this.#privateView.init(tableros,tasks,idTablero);
+
     }  
-    
     
     async delete(id){
         debugger;
         const servicio = new TablerosService(this.#privateApiyURL);
         await servicio.deleteTask(id);
-            alert("Tarea Eliminada correctamente");
-            window.location.reload();
+        alert("Tarea Eliminada correctamente");
+        window.location.reload();
+
     }
     async create(nombreTarea,descripcion,idTablero,idColumna){
         

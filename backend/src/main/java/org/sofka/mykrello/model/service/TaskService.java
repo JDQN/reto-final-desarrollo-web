@@ -106,7 +106,15 @@ public class TaskService implements TaskServiceInterface {
     public TaskDomain delete(Integer id) {
         try {
             var taskDomain = taskRepository.findById(id);
-            logRepository.deleteById(id);
+            var a = logRepository.findByIdLogbytask(id.toString());
+
+            for(Integer i = 0; i < a.size(); i++) {
+                var idLog = a.get(i).getId();
+                logRepository.deleteById(idLog);
+
+
+            }
+
 
             taskRepository.deleteById(id);
             return taskDomain.get();

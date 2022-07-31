@@ -7,6 +7,7 @@ import org.sofka.mykrello.controller.domain.ColumnForBoardDomain;
 import org.sofka.mykrello.model.repository.*;
 import org.sofka.mykrello.model.service.interfaces.BoardServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,8 @@ public class BoardService implements BoardServiceInterface {
     private ColumnForBoardRepository columnForBoardRepository;
     @Autowired
     private TaskRepository taskRepository;
+    @Autowired
+    private LogRepository logRepository;
 
 
     /**
@@ -54,7 +57,7 @@ public class BoardService implements BoardServiceInterface {
 
     /**
      * Método que permite crear un registro en la tabla BoardDomain.
-     * @param boardDomain
+     * @param board
      * @return BoardDomain
      */
     @Override
@@ -76,7 +79,7 @@ public class BoardService implements BoardServiceInterface {
 
     /**
      * Método que permite actualizar un registro en la tabla BoardDomain.
-     * @param boardDomain
+     * @param board
      * @return BoardDomain
      */
     @Override
@@ -95,6 +98,24 @@ public class BoardService implements BoardServiceInterface {
     @Override
     @Transactional
     public BoardDomain delete(Integer id) {
+
+        var c = taskRepository.findByIdBoard(id);
+
+        for(Integer i = 0; i < c.size(); i++) {
+            var idTask = c.get(i).getId();
+            //TaskService task = new TaskService();
+            //task.delete(idTask);
+
+            var taskDomain = taskRepository.findById(idTask);
+            var a = logRepository.findByIdLogbytask(idTask.toString());
+
+            for(Integer j = 0; j < a.size(); j++) {
+                var idLog = a.get(j).getId();
+                logRepository.deleteById(idLog);
+            }
+            taskRepository.deleteById(idTask);
+        }
+
         var optionalBoard = boardRepository.findById(id);
         if (optionalBoard.isPresent()) {
             var board = optionalBoard.get();

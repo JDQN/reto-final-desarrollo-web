@@ -51,32 +51,21 @@ public class LogDomain implements Serializable {
      * value="logPrevious" indica que la clase se serializará como logPrevious.
      */
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = ColumnDomain.class, optional = false/*, cascade = CascadeType.REMOVE *//*,cascade = CascadeType.REMOVE*/)
-    @JoinColumn(name = "clm_id_previous", nullable = false, updatable = false, insertable = false)
+    @JoinColumn(name = "clm_id_previous",  updatable = false, insertable = false)
     @JsonBackReference(value = "logPrevious")
     private ColumnDomain previous;
 
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = ColumnDomain.class, optional = false/*,cascade = CascadeType.REMOVE*/)
-    @JoinColumn(name = "clm_id_current", nullable = false, updatable = false, insertable = false)
+    @JoinColumn(name = "clm_id_current", updatable = false, insertable = false)
     @JsonBackReference(value = "logCurrent")
     private ColumnDomain current;
 
-    @ManyToOne(targetEntity = TaskDomain.class, optional = false, /*cascade = CascadeType.REMOVE,*/ fetch = FetchType.EAGER)
-    @JsonManagedReference(value = "logForTask")
-    @JsonIgnore
-    @JoinColumn( name = "tsk_id_task", insertable =false, updatable=false)
-    private TaskDomain taskLog;
-
-
-//    @ManyToOne(fetch = FetchType.LAZY, targetEntity = TaskDomain.class, optional = false, cascade = CascadeType.DETACH)
-//    @JoinColumn(name = "tsk_id", nullable = false, updatable = false, insertable = false)
-//    @JsonBackReference(value = "logTask")
-//    private TaskDomain task;
-//
-//    @ManyToOne(fetch = FetchType.LAZY, targetEntity = BoardDomain.class, optional = false, cascade = CascadeType.DETACH)
-//    @JoinColumn(name = "brd_id", nullable = false, updatable = false, insertable = false)
-//    @JsonBackReference(value = "logBoard")
-//    private BoardDomain board;
+   // @ManyToOne(targetEntity = TaskDomain.class, optional = false/*, cascade = CascadeType.REMOVE*/, fetch = FetchType.EAGER)
+    //@JsonManagedReference(value = "logForTask")
+    //@JsonIgnore
+    //@JoinColumn( name = "tsk_id_task", insertable =false, updatable=false)
+     //private TaskDomain taskLog;
 
 
     /**
@@ -88,15 +77,15 @@ public class LogDomain implements Serializable {
     private Instant createdAt = Instant.now();
 
 
-    @Column(name = "tsk_id_task", nullable = false, updatable = false)
+    @Column(name = "tsk_id_task", nullable = true, updatable = true, insertable =true)
     private String idTask;
 
 
-    @Column(name = "clm_id_previous", nullable = false, updatable = false)
+    @Column(name = "clm_id_previous", nullable = true, updatable = true, insertable =true)
     private String idPrevious;
 
 
-    @Column(name = "clm_id_current", nullable = false, updatable = false)
+    @Column(name = "clm_id_current", nullable = true, updatable = true , insertable =true)
     private String idCurrent;
 
 }
