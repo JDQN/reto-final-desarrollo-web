@@ -58,6 +58,8 @@ export class TablerosController {
     async delete(id){
         const servicio = new TablerosService(this.#privateApiyURL);
         await servicio.delete(id);
+        debugger;
+        window.location.reload();
         
     }
 

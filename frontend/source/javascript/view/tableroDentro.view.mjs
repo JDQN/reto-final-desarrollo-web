@@ -87,12 +87,53 @@ export class TableroDentroView {
             const divBotones = document.createElement("div");
             divBotones.classList.add("divBotones","btn-group", "btn-group-md");
 
-            
+                const inputNombreTarea =document.createElement("input");
+                inputNombreTarea.placeholder= "Nuevo nombre de la tarea";
+                inputNombreTarea.id = "nombreInputTarea"+task.Id;
+                inputNombreTarea.style.display="none";
+
+
+                const inputDescripcionTarea =document.createElement("input");
+                inputDescripcionTarea.placeholder= "Nueva descripcion de la tarea";
+                inputDescripcionTarea.id = "descripcionInputTarea"+task.Id;
+                inputDescripcionTarea.style.display="none";
+
+                const buttonGuardar = document.createElement("button");
+                buttonGuardar.id= "guardar"+task.Id;
+                buttonGuardar.classList.add('btn', 'btn-success');
+                buttonGuardar.style.display="none";
+                buttonGuardar.textContent = 'Guardar';
+
+                buttonGuardar.addEventListener("click",() => {
+
+                        var nombre = document.getElementById("nombreInputTarea"+task.Id).value;
+
+                        var descripcion = document.getElementById("descripcionInputTarea"+task.Id).value;
+
+                        var fechaCreacion = task.FechaCreacionTarea;
+                        description.updateTarea(idColumn,idTablero,nombre,descripcion,fechaCreacion,task.Id);
+
+
+
+                });
+
+
             /* Boton Abrir Tareas*/
             const buttonAbrir = this.#privateCreateButton();
             buttonAbrir.classList.add('btn', 'btn-success');
-            buttonAbrir.textContent = 'Abrir';
-            buttonAbrir.addEventListener("click",() => location.href = Config.FrontendURL+"/tableroDentro.html?id="+tablero.Id);
+            buttonAbrir.textContent = 'Editar';
+            buttonAbrir.addEventListener("click",() => {
+                debugger;
+                inputNombreTarea.style.display="block";
+
+                inputDescripcionTarea.style.display="block";
+                buttonGuardar.style.display="block";
+
+
+            });
+
+
+
     
             /* Boton Eliminar Tarea */
             const buttonEliminar = this.#privateCreateButton();
@@ -155,7 +196,7 @@ export class TableroDentroView {
             }
 
             //container.append(div)
-            pruebaDiv.append(divBotones);
+            pruebaDiv.append(inputNombreTarea, inputDescripcionTarea,buttonGuardar,divBotones);
             h.append(pruebaDiv);
         });             
     }
@@ -174,4 +215,7 @@ export class TableroDentroView {
     #privateCreateTitle() {
         return document.createElement('h1');
     }   
+
+  
+
 }

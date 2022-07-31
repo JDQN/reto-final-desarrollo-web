@@ -101,6 +101,28 @@ export class TableroDentroController {
             })
         }
     }
+
+    async updateTarea (idColumn,idTablero,name,descripcion,fechaCreacion,id){
+        const servicio = new TablerosService(this.#privateApiyURL);
+debugger;
+        let nombre = {
+            "idColumn":idColumn,
+            "idBoard":idTablero,
+            "name":name,
+            "description":descripcion,
+            "create": fechaCreacion
+        };
+        await servicio.editarTarea(nombre,id);
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            text: 'Tarea editada correctamente',
+            showConfirmButton: false,
+            timer: 1300
+        }).then(() => {
+           window.location.reload()
+        })
+    }
 }
 
 export const instance = new TableroDentroController();
