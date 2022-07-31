@@ -7,7 +7,7 @@ export class TableroDentroView {
     #privateBody;
 
     constructor() {
-        document.title = "Lista de tableros";
+        document.title = "Tareas tablero";
         this.#privateBody = document.querySelector('body');
     }
 
@@ -18,10 +18,47 @@ export class TableroDentroView {
     init(columnas,tasks,idTablero) {
         const description = new TableroDentroController();
 
-        let nombreColumnas = ["Por realizar","En progreso","Terminado"];
         var numeroColumnas = columnas.length;
+        this.#privateMostroarColumnas(columnas,idTablero);
 
+        tasks.forEach((task)=>{
+            var idColumn = task.IdColumn;
+            var divColumna = document.getElementById(idColumn);
+
+            const tareaDiv = document.createElement("section");
+            tareaDiv.id = "tarea"+task.Id;
+            tareaDiv.classList.add('task');
+            
+            
+            this.#privatemostrarInformacionGeneralTarea(tareaDiv, task);
+            
+            /// opciones que permiten edtitar la tarea e inicialmente estan ocultos
+            const buttonAbrir =this.#privateCreacionElementosEditarTarea(tareaDiv, task,idColumn,idTablero);
+
+            
+
+            /* grupo de botones */
+            const divBotones = document.createElement("div");
+            divBotones.classList.add("divBotones","btn-group", "btn-group-md");
+
+            /* Boton Eliminar Tarea */
+            const buttonEliminar = this.#privateCreateButton();
+            buttonEliminar.classList.add('btn', 'btn-danger');
+            buttonEliminar.innerHTML = `<i class="bi bi-trash"></i>`;
+            buttonEliminar.addEventListener("click",() => {description.delete(task.Id);});
+
+
+            this.#privateMoverTarea(divBotones,buttonAbrir,buttonEliminar,task,idColumn,idTablero,numeroColumnas);
+            
+            tareaDiv.append(divBotones);
+            divColumna.append(tareaDiv);
+        });             
+    }
+
+
+    #privateMostroarColumnas(columnas,idTablero){
         columnas.forEach((element)=>{
+            const controlador = new TableroDentroController();
 
             const div = document.createElement("section");
             div.classList.add("columnasTask");
@@ -50,172 +87,133 @@ export class TableroDentroView {
                 const descripcion = document.getElementById("descripcion"+element.Name).value;
                 const idColumna = element.Id;
                 
-                description.create(nombre,descripcion,idTablero,idColumna);
+                controlador.create(nombre,descripcion,idTablero,idColumna);
             });
             div.append(titulo,inputNombre,inputDescripcion,buttonCrearTarea);
             this.#privateBody.append(div);
         });
+    }
+    #privatemostrarInformacionGeneralTarea(tareaDiv, task){
 
-        tasks.forEach((task)=>{
-            var idColumn = task.Image;
-            var h = document.getElementById(idColumn);
+        /* Contenido de la Crad */
+        const nombreTarea = document.createElement("h5");
+        nombreTarea.classList.add("card-title");
+        nombreTarea.textContent = "Tarea: "+task.Name; 
 
-            const pruebaDiv = document.createElement("section");
-            pruebaDiv.id = "tarea"+task.Id;
-            pruebaDiv.classList.add('task');
+
+        const descripcionTarea = document.createElement("h6");
+        descripcionTarea.classList.add("card-text");
+        descripcionTarea.textContent = "Descripcion: "+task.DescripcionTarea; 
+
+
+        const fechaCreacionTarea = document.createElement("p");
+        fechaCreacionTarea.classList.add("card-text");
+        fechaCreacionTarea.textContent = "Fecha de creacion: "+task.FechaCreacionTarea; 
+
+        tareaDiv.append(nombreTarea,descripcionTarea,fechaCreacionTarea);
+    }
+
+    #privateCreacionElementosEditarTarea(tareaDiv, task,idColumn,idTablero){
+        const controlador = new TableroDentroController();
+
+        const inputNombreTarea =document.createElement("input");
+        inputNombreTarea.placeholder= "Nuevo nombre de la tarea";
+        inputNombreTarea.id = "nombreInputTarea"+task.Id;
+        inputNombreTarea.style.display="none";
+
+
+        const inputDescripcionTarea =document.createElement("input");
+        inputDescripcionTarea.placeholder= "Nueva descripcion de la tarea";
+        inputDescripcionTarea.id = "descripcionInputTarea"+task.Id;
+        inputDescripcionTarea.style.display="none";
+
+        const buttonGuardar = document.createElement("button");
+        buttonGuardar.id= "guardar"+task.Id;
+        buttonGuardar.classList.add('btn', 'btn-success');
+        buttonGuardar.style.display="none";
+        buttonGuardar.textContent = 'Guardar';
+
+        buttonGuardar.addEventListener("click",() => {
+
+                var nombre = document.getElementById("nombreInputTarea"+task.Id).value;
+
+                var descripcion = document.getElementById("descripcionInputTarea"+task.Id).value;
+
+                var fechaCreacion = task.FechaCreacionTarea;
+                controlador.updateTarea(idColumn,idTablero,nombre,descripcion,fechaCreacion,task.Id);
+        });
+
+        const buttonAbrir = this.#privateCreateButton();
+        buttonAbrir.classList.add('btn', 'btn-success');
+        buttonAbrir.textContent = 'Editar';
+        buttonAbrir.addEventListener("click",() => {
+            inputNombreTarea.style.display="block";
+
+            inputDescripcionTarea.style.display="block";
+            buttonGuardar.style.display="block";
+        });
+
+        tareaDiv.append(inputNombreTarea, inputDescripcionTarea,buttonGuardar);
+        return buttonAbrir;
+    }
+
+    #privateMoverTarea(divBotones, buttonAbrir,buttonEliminar,task,idColumn,idTablero, numeroColumnas){
+        if(idColumn-1 == 0)
+        {
+            const buttonMoverDerecha = this.#privateMoverDerecha(task, idColumn,idTablero);
+            divBotones.append(buttonAbrir,buttonEliminar,buttonMoverDerecha);
+        }
+        else if(idColumn == numeroColumnas){
+            const buttonMoverIzquierda = this.#privateMoverIzquierda(task, idColumn,idTablero);            
+            divBotones.append(buttonMoverIzquierda,buttonAbrir,buttonEliminar);
+        }
+        else{
+            const buttonMoverDerecha = this.#privateMoverDerecha(task, idColumn,idTablero);
+            const buttonMoverIzquierda = this.#privateMoverIzquierda(task, idColumn,idTablero);            
+            divBotones.append(buttonMoverIzquierda,buttonAbrir,buttonEliminar,buttonMoverDerecha);
+        }
+
+    }
+
+    #privateMoverIzquierda(task, idColumn,idTablero){
+        const controlador = new TableroDentroController();
+        const buttonMoverIzquierda = this.#privateCreateButton();
+        buttonMoverIzquierda.classList.add('btn', 'btn-primary');
+        buttonMoverIzquierda.innerHTML = `<i class="bi bi-arrow-return-left"></i>`;
+
+        buttonMoverIzquierda.addEventListener("click",() => {
+            var name=task.Name;
+            var descripcion = task.DescripcionTarea;
+            var fechaCreacion = task.FechaCreacionTarea;
+            controlador.mover(idColumn-1,idTablero,name,descripcion,fechaCreacion,task.Id);
+        });
+        return buttonMoverIzquierda;
+    }
+    #privateMoverDerecha(task, idColumn,idTablero){
+        const controlador = new TableroDentroController();
+        const buttonMoverDerecha = this.#privateCreateButton();
             
-            
-            /* Contenido de la Crad */
-            const p1 = document.createElement("h5");
-            p1.classList.add("card-title");
-            p1.textContent = "Tarea: "+task.Name; 
-    
+        buttonMoverDerecha.classList.add('btn', 'btn-primary');
+        buttonMoverDerecha.innerHTML = `<i class="bi bi-arrow-return-right"></i>`;
 
-            const p2 = document.createElement("h6");
-            p2.classList.add("card-text");
-            p2.textContent = "Descripcion: "+task.DescripcionTarea; 
-    
-
-            const p3 = document.createElement("p");
-            p3.classList.add("card-text");
-            p3.textContent = "Fecha de creacion: "+task.FechaCreacionTarea; 
+        buttonMoverDerecha.addEventListener("click",() => {
+            var name=task.Name;
+            var descripcion = task.DescripcionTarea;
+            var fechaCreacion = task.FechaCreacionTarea;
+            controlador.mover(idColumn+1,idTablero,name,descripcion,fechaCreacion,task.Id);
         
-            pruebaDiv.append(p1,p2,p3);
-    
+        });
+        return buttonMoverDerecha;
 
-            /* Brupo de botones */
-            const divBotones = document.createElement("div");
-            divBotones.classList.add("divBotones","btn-group", "btn-group-md");
-
-                const inputNombreTarea =document.createElement("input");
-                inputNombreTarea.placeholder= "Nuevo nombre de la tarea";
-                inputNombreTarea.id = "nombreInputTarea"+task.Id;
-                inputNombreTarea.style.display="none";
-
-
-                const inputDescripcionTarea =document.createElement("input");
-                inputDescripcionTarea.placeholder= "Nueva descripcion de la tarea";
-                inputDescripcionTarea.id = "descripcionInputTarea"+task.Id;
-                inputDescripcionTarea.style.display="none";
-
-                const buttonGuardar = document.createElement("button");
-                buttonGuardar.id= "guardar"+task.Id;
-                buttonGuardar.classList.add('btn', 'btn-success');
-                buttonGuardar.style.display="none";
-                buttonGuardar.textContent = 'Guardar';
-
-                buttonGuardar.addEventListener("click",() => {
-
-                        var nombre = document.getElementById("nombreInputTarea"+task.Id).value;
-
-                        var descripcion = document.getElementById("descripcionInputTarea"+task.Id).value;
-
-                        var fechaCreacion = task.FechaCreacionTarea;
-                        description.updateTarea(idColumn,idTablero,nombre,descripcion,fechaCreacion,task.Id);
-
-
-
-                });
-
-
-            /* Boton Abrir Tareas*/
-            const buttonAbrir = this.#privateCreateButton();
-            buttonAbrir.classList.add('btn', 'btn-success');
-            buttonAbrir.textContent = 'Editar';
-            buttonAbrir.addEventListener("click",() => {
-                debugger;
-                inputNombreTarea.style.display="block";
-
-                inputDescripcionTarea.style.display="block";
-                buttonGuardar.style.display="block";
-
-
-            });
-
-
-
-    
-            /* Boton Eliminar Tarea */
-            const buttonEliminar = this.#privateCreateButton();
-            buttonEliminar.classList.add('btn', 'btn-danger');
-            buttonEliminar.innerHTML = `<i class="bi bi-trash"></i>`;
-            buttonEliminar.addEventListener("click",() => {description.delete(task.Id);});
-            
-            //debugger;
-            if(idColumn-1 == 0)
-            {
-                const buttonMoverDerecha = this.#privateCreateButton();
-                buttonMoverDerecha.classList.add('btn', 'btn-primary');
-                buttonMoverDerecha.innerHTML = `<i class="bi bi-arrow-return-right"></i>`;
-
-                buttonMoverDerecha.addEventListener("click",() => {
-                    var name=task.Name;
-                    var descripcion = task.DescripcionTarea;
-                    var fechaCreacion = task.FechaCreacionTarea;
-                    description.mover(idColumn+1,idTablero,name,descripcion,fechaCreacion,task.Id);
-                
-                });
-                divBotones.append(buttonAbrir,buttonEliminar,buttonMoverDerecha);
-            }
-            else if(idColumn == numeroColumnas){
-                const buttonMoverIzquierda = this.#privateCreateButton();
-                buttonMoverIzquierda.classList.add('btn', 'btn-primary');
-                buttonMoverIzquierda.innerHTML = `<i class="bi bi-arrow-return-left"></i>`;
-
-                buttonMoverIzquierda.addEventListener("click",() => {
-                    var name=task.Name;
-                    var descripcion = task.DescripcionTarea;
-                    var fechaCreacion = task.FechaCreacionTarea;
-                    description.mover(idColumn-1,idTablero,name,descripcion,fechaCreacion,task.Id);
-                });
-                divBotones.append(buttonMoverIzquierda,buttonAbrir,buttonEliminar);
-            }
-            else{
-                const buttonMoverDerecha = this.#privateCreateButton();
-                buttonMoverDerecha.classList.add('btn', 'btn-primary');
-                buttonMoverDerecha.innerHTML = `<i class="bi bi-arrow-return-right"></i>`;;
-
-                const buttonMoverIzquierda = this.#privateCreateButton();
-                buttonMoverIzquierda.classList.add('btn', 'btn-primary');
-                buttonMoverIzquierda.innerHTML = `<i class="bi bi-arrow-return-left"></i>`;
-
-                buttonMoverDerecha.addEventListener("click",() => {
-                    var name=task.Name;
-                    var descripcion = task.DescripcionTarea;
-                    var fechaCreacion = task.FechaCreacionTarea;
-                    description.mover(idColumn+1,idTablero,name,descripcion,fechaCreacion,task.Id);
-                });
-
-                buttonMoverIzquierda.addEventListener("click",() => {
-                    var name=task.Name;
-                    var descripcion = task.DescripcionTarea;
-                    var fechaCreacion = task.FechaCreacionTarea;
-                    description.mover(idColumn-1,idTablero,name,descripcion,fechaCreacion,task.Id);
-                });
-                divBotones.append(buttonMoverIzquierda,buttonAbrir,buttonEliminar,buttonMoverDerecha);
-            }
-
-            //container.append(div)
-            pruebaDiv.append(inputNombreTarea, inputDescripcionTarea,buttonGuardar,divBotones);
-            h.append(pruebaDiv);
-        });             
     }
 
     #privateCreateCard() {
         return document.createElement('div');
     }
-
     #privateCreateButton() {
         return document.createElement('button');
     }
-    #privateCreateImage() {
-        return document.createElement('img');
-    }
-
     #privateCreateTitle() {
         return document.createElement('h1');
-    }   
-
-  
-
+    }
 }

@@ -1,65 +1,11 @@
-import { tablerosModel } from "../Tableros.model.mjs";
+import { tableroDentroModel } from "../TableroDentro.model.mjs";
 
-export class TablerosService {
+export class TableroDentroService {
     #privateUrl;
     constructor(url) {
         this.#privateUrl = url;
     }
-    // tableros 
-    async  getTableros() {
-        const tablerosData = await this.#getData();
-        const arrayTableros = new Array();
-        tablerosData.data.forEach((element)=>{
-            arrayTableros.push(new tablerosModel(element.id,element.name));
-        });    
-        return arrayTableros;
-    }
-
-    #getData(){
-        return fetch(`${this.#privateUrl+'/board'}`).then(response => response.json());
-    }
-
-    async create(data)
-    {     
-        await fetch(
-            `${this.#privateUrl+'/board'}`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data),
-            }
-        ).then(response => response.json());
-    }
-
-    async editar(data,id)
-    {     
-        await fetch(
-            `${this.#privateUrl+'/board'}/${id}`,
-            {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data),
-            }
-        ).then(response => response.json());
-    }
-
-    async delete(id) {
-      
-        await fetch(
-            `${this.#privateUrl+'/board'}/${id}`,
-            {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            }
-        ).then(response => response.json());
-    }
-
+    
     ///////////Tareas
 
     async  getColumnNames() {
@@ -67,7 +13,7 @@ export class TablerosService {
         const arrayTableros = new Array();
         
         tablerosData.data.forEach((element)=>{
-            arrayTableros.push(new tablerosModel(element.id,element.name));
+            arrayTableros.push(new tableroDentroModel(element.id,element.name));
         });    
 
         return arrayTableros;
@@ -79,7 +25,7 @@ export class TablerosService {
         const arrayTableros = new Array();
         
         tablerosData.data.forEach((element)=>{
-            arrayTableros.push(new tablerosModel(element.id,element.name,element.idColumn,element.description,element.create));
+            arrayTableros.push(new tableroDentroModel(element.id,element.name,element.idColumn,element.description,element.create));
         });    
 
         return arrayTableros;

@@ -49,21 +49,17 @@ export class TablerosController {
             }).then(() => {
                 window.location.reload()
             })
-            //const tableros = await servicio.getTableros();
-            //this.#privateView.init(tableros);
-            //alert("Tablero Creado correctamente");
         }
     }
 
     async delete(id){
         const servicio = new TablerosService(this.#privateApiyURL);
         await servicio.delete(id);
-        debugger;
         window.location.reload();
         
     }
 
-    async editar(text,id){debugger;
+    async editar(text,id){
         if(text == ""){
             Swal.fire(
                 'Error',
@@ -73,12 +69,9 @@ export class TablerosController {
         }else{
             const servicio = new TablerosService(this.#privateApiyURL);
             let nombre = {"name":text,
-            //"createdAt": new Date().toISOString(),
+            
             "updatedAt":  new Date().toISOString()};
             await servicio.editar(nombre,id);
-            //const tableros = await servicio.getTableros();
-            //this.#privateView.init(tableros);
-
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',

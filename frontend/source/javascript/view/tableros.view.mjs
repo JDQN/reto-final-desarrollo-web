@@ -11,15 +11,22 @@ export class TablerosView {
         this.#privateBody = document.querySelector('body');
     }
 
-    /**
-     * 
-     * @param {} tableros 
-     */
     init(tableros) {
 
-        //this.#privateBody.remove();
-        //this.#privateBody = document.querySelector('body');
+        const description = new TablerosController();
+        var card = this.#privateMenuCrearTableros();
+        this.#privateBody.append(card);
 
+
+        tableros.forEach((tablero)=>{
+            
+            var card = this.#privateMostrarTableros(tablero);
+            this.#privateBody.append(card);
+
+        });
+    }
+
+    #privateMenuCrearTableros(){
         const description = new TablerosController();
         
         const card = this.#privateCreateCard();
@@ -45,53 +52,53 @@ export class TablerosView {
 
         card.append(title,input,buttonCreate);
 
-        this.#privateBody.append(card);
-
-        tableros.forEach((tablero)=>{
-            
-            const card = this.#privateCreateCard();
-            card.id = tablero.Id;
-
-            const title = this.#privateCreateTitle();
-            title.textContent = tablero.Name;
-
-            const inputEditar = document.createElement('input');
-            inputEditar.type = "text";
-            inputEditar.classList.add("form-control");
-            inputEditar.id = "editar"+tablero.Id;
-            inputEditar.placeholder = "Editar nombre del tablero:";
-            inputEditar.required = true;
-
-            const container = document.createElement('container');
-            container.classList.add("btn-group", "btn-group-md");
-
-            /* Boton Abrir tareas */
-            const buttonAbrir = this.#privateCreateButton();
-            buttonAbrir.classList.add('btn', 'btn-outline-success');
-            buttonAbrir.textContent = 'Abrir';
-            buttonAbrir.addEventListener("click",() => location.href = Config.FrontendURL+"/tableroDentro.html?id="+tablero.Id);
-
-
-            /* Boton Editar tareas */
-            const buttonEditar = this.#privateCreateButton();
-            buttonEditar.classList.add('btn', 'btn-outline-primary');
-            buttonEditar.textContent = 'Editar';
-            buttonEditar.addEventListener("click",() => {const text = document.getElementById("editar"+tablero.Id).value; description.editar(text,tablero.Id); })
-
-
-            /* Boton Elimianr tareas */
-            const buttonEliminar = this.#privateCreateButton();
-            buttonEliminar.classList.add('btn', 'btn-outline-danger');
-            buttonEliminar.textContent = 'Eliminar';
-            buttonEliminar.addEventListener("click",() => { description.delete(tablero.Id); })
-
-            
-            container.append(buttonAbrir, buttonEditar, buttonEliminar);
-            card.append(title, inputEditar, container); 
-            this.#privateBody.append(card);
-            return card;
-        });
+        return card;
+        
     }
+
+    #privateMostrarTableros(tablero){
+        const card = this.#privateCreateCard();
+        card.id = tablero.Id;
+
+        const title = this.#privateCreateTitle();
+        title.textContent = tablero.Name;
+
+        const inputEditar = document.createElement('input');
+        inputEditar.type = "text";
+        inputEditar.classList.add("form-control");
+        inputEditar.id = "editar"+tablero.Id;
+        inputEditar.placeholder = "Editar nombre del tablero:";
+        inputEditar.required = true;
+
+        const container = document.createElement('container');
+        container.classList.add("btn-group", "btn-group-md");
+
+        /* Boton Abrir tablero */
+        const buttonAbrir = this.#privateCreateButton();
+        buttonAbrir.classList.add('btn', 'btn-outline-success');
+        buttonAbrir.textContent = 'Abrir';
+        buttonAbrir.addEventListener("click",() => location.href = Config.FrontendURL+"/tableroDentro.html?id="+tablero.Id);
+
+
+        /* Boton Editar tablero */
+        const buttonEditar = this.#privateCreateButton();
+        buttonEditar.classList.add('btn', 'btn-outline-primary');
+        buttonEditar.textContent = 'Editar';
+        buttonEditar.addEventListener("click",() => {const text = document.getElementById("editar"+tablero.Id).value; description.editar(text,tablero.Id); })
+
+
+        /* Boton Elimianr tablero */
+        const buttonEliminar = this.#privateCreateButton();
+        buttonEliminar.classList.add('btn', 'btn-outline-danger');
+        buttonEliminar.textContent = 'Eliminar';
+        buttonEliminar.addEventListener("click",() => { description.delete(tablero.Id); })
+
+        
+        container.append(buttonAbrir, buttonEditar, buttonEliminar);
+        card.append(title, inputEditar, container); 
+        return card;
+    }
+
 
 
     #privateCreateCard() {
@@ -100,10 +107,6 @@ export class TablerosView {
 
     #privateCreateButton() {
         return document.createElement('button');
-    }
-
-    #privateCreateImage() {
-        return document.createElement('img');
     }
 
     #privateCreateTitle() {

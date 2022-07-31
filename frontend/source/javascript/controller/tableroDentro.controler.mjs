@@ -6,7 +6,7 @@ import { Config } from "../config.mjs";
 import { TableroDentroView  } from "../view/tableroDentro.view.mjs";
 
 // Services
-import { TablerosService } from "../model/services/tableros.service.mjs";
+import { TableroDentroService } from "../model/services/tableroDentro.service.mjs";
 
 
 
@@ -22,20 +22,17 @@ export class TableroDentroController {
 
     async init() {
         
-        const servicio = new TablerosService(this.#privateApiyURL);
+        const servicio = new TableroDentroService(this.#privateApiyURL);
         const tableros = await servicio.getColumnNames();
-        var ga = location.search;
-        debugger;
-        var id = ga.replace('?id=','');
-        var idTablero = id;
+        var obtenerIdBoard = location.search;
+        var idTablero = obtenerIdBoard.replace('?id=','');
         const tasks = await servicio.getTaskFoBoard(idTablero);
         this.#privateView.init(tableros,tasks,idTablero);
 
     }  
     
     async delete(id){
-        debugger;
-        const servicio = new TablerosService(this.#privateApiyURL);
+        const servicio = new TableroDentroService(this.#privateApiyURL);
         await servicio.deleteTask(id);
         alert("Tarea Eliminada correctamente");
         window.location.reload();
@@ -50,7 +47,7 @@ export class TableroDentroController {
                 'error'
             )
         }else{
-            const servicio = new TablerosService(this.#privateApiyURL);
+            const servicio = new TableroDentroService(this.#privateApiyURL);
             let nombre = {
                 "idColumn":idColumna,
                 "idBoard":idTablero,
@@ -59,8 +56,7 @@ export class TableroDentroController {
                 "create": new Date().toISOString()
             };
             await servicio.createTask(nombre);
-            //const tableros = await servicio.getTableros();
-            //this.#privateView.init(tableros);
+        
 
             Swal.fire({
                 position: 'top-end',
@@ -75,7 +71,7 @@ export class TableroDentroController {
     }
 
     async mover(idColumn,idTablero,name,descripcion,fechaCreacion,id){
-        const servicio = new TablerosService(this.#privateApiyURL);
+        const servicio = new TableroDentroService(this.#privateApiyURL);
 
         let nombre = {
             "idColumn":idColumn,
@@ -85,9 +81,7 @@ export class TableroDentroController {
             "create": fechaCreacion
         };
         await servicio.editarTarea(nombre,id);
-        //const tableros = await servicio.getTableros();
-        //this.#privateView.init(tableros);
-
+    
         const movimiento = idColumn == 1 || idColumn == 2 || idColumn == 3;
         if(movimiento){
             Swal.fire({
@@ -103,8 +97,7 @@ export class TableroDentroController {
     }
 
     async updateTarea (idColumn,idTablero,name,descripcion,fechaCreacion,id){
-        const servicio = new TablerosService(this.#privateApiyURL);
-debugger;
+        const servicio = new TableroDentroService(this.#privateApiyURL);
         let nombre = {
             "idColumn":idColumn,
             "idBoard":idTablero,
