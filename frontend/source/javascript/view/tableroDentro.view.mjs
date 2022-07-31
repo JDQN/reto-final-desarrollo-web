@@ -17,6 +17,9 @@ export class TableroDentroView {
      */
     init(columnas,tasks,idTablero) {
         const controlador = new TableroDentroController();
+        
+       
+
 
         var numeroColumnas = columnas.length;
         this.#privateMostroarColumnas(columnas,idTablero);
@@ -57,6 +60,18 @@ export class TableroDentroView {
 
 
     #privateMostroarColumnas(columnas,idTablero){
+
+        const botonVolver = document.createElement("button");
+
+        const divVolver = document.createElement("div");
+        divVolver.style.width = "100%";
+        botonVolver.textContent = "Volver";
+        botonVolver.classList.add('btn', 'btn-primary');
+        botonVolver.addEventListener("click",() => location.href = Config.FrontendURL+"/tableros.html");
+
+        divVolver.append(botonVolver);
+        this.#privateBody.append(divVolver);
+
         columnas.forEach((element)=>{
             const controlador = new TableroDentroController();
 
