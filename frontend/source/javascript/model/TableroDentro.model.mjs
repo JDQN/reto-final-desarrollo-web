@@ -1,6 +1,11 @@
 'use strict';
 
+/**
+ * @class TableroDentroController 
+ */
 export class tableroDentroModel {
+    
+
     #privateId;
     #privateName;
     #privateIdColumn;

@@ -1,6 +1,11 @@
 'use strict';
 
+
+/**
+ * @class TableroDentroModel
+ */
 export class tablerosModel {
+
     #privateId;
     #privateName;
 

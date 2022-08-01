@@ -1,11 +1,20 @@
 import { tablerosModel } from "../Tableros.model.mjs";
 
+/**
+ * @class TablerosService
+ */
 export class TablerosService {
+
     #privateUrl;
+    
     constructor(url) {
         this.#privateUrl = url;
     }
-    // tableros 
+    
+    /**
+     * Metodo gatTableros se encarga de obtener los tableros
+     * @returns {Promise<Array>}
+     */
     async  getTableros() {
         const tablerosData = await this.#getData();
         const arrayTableros = new Array();
@@ -19,6 +28,11 @@ export class TablerosService {
         return fetch(`${this.#privateUrl+'/board'}`).then(response => response.json());
     }
 
+
+    /**
+     * Metodo create se encarga de crear un nuevo tablero
+     * @param {*} data 
+     */
     async create(data)
     {     
         await fetch(
@@ -33,6 +47,12 @@ export class TablerosService {
         ).then(response => response.json());
     }
 
+
+    /**
+     * Metodo editar se encarga de editar un tablero existente
+     * @param {*} data 
+     * @param {*} id 
+     */
     async editar(data,id)
     {     
         await fetch(
@@ -47,8 +67,12 @@ export class TablerosService {
         ).then(response => response.json());
     }
 
+
+    /**
+     * Metodo delete se encarga de eliminar un tablero existente
+     * @param {*} id 
+     */
     async delete(id) {
-      
         await fetch(
             `${this.#privateUrl+'/board'}/${id}`,
             {

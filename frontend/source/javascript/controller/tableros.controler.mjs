@@ -10,23 +10,37 @@ import { TablerosService } from "../model/services/tableros.service.mjs";
 
 
 
+/**
+ * @class TablerosController
+ */
 export class TablerosController {
+    
     #privateApiyURL;
     #privateView;
+
 
     constructor() {
         this.#privateApiyURL = Config.API_URL;        
         this.#privateView = new TablerosView();
-        
     }
 
+    /**
+     * El metodo initi()  se encarga de inicializar el controlador
+     * const servicio se encarga de inicializar el servicio
+     * const tableros se encarga de inicializar el tablero
+     * this.#privateView.init se encarga de inicializar la vista
+     */
     async init() {
-        
         const servicio = new TablerosService(this.#privateApiyURL);
         const tableros = await servicio.getTableros();
         this.#privateView.init(tableros);
-
     }  
+
+
+    /**
+     * create se encarga de crear un nuevo tablero
+     * @param {*} text 
+     */
     async create(text){
         
         if(text == ""){
@@ -52,6 +66,10 @@ export class TablerosController {
         }
     }
 
+    /**
+     * delete se encarga de eliminar un tablero
+     * @param {*} id 
+     */
     async delete(id){
         const servicio = new TablerosService(this.#privateApiyURL);
         await servicio.delete(id);
@@ -67,6 +85,12 @@ export class TablerosController {
         
     }
 
+
+    /**
+     * editar se encarga de editar un tablero para cambiar el nombre del tablero
+     * @param {*} text 
+     * @param {*} id 
+     */
     async editar(text,id){
         if(text == ""){
             Swal.fire(

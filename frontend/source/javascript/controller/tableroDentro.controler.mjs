@@ -10,18 +10,35 @@ import { TableroDentroService } from "../model/services/tableroDentro.service.mj
 
 
 
+/**
+ * @class TableroDentroController 
+*/
 export class TableroDentroController {
+
     #privateApiyURL;
     #privateView;
     
 
+    /**
+     * @constructor se encargar de inicializar el controlador 
+     */
     constructor() {
         this.#privateApiyURL = Config.API_URL;        
         this.#privateView = new TableroDentroView();
     }
 
+
+    /**
+     * async init se encarga de inicializar el controlador
+     * const servicio se encarga de inicializar el servicio
+     * const tablero se encarga de inicializar el tablero
+     * var obtenerIdBoard se encarga de obtener el id del tablero
+     * var idTablero se encarga de obtener el id del tablero
+     * const tasks se encarga de obtener las tareas
+     * 
+     * this.#privateView.init se encarga de inicializar la vista
+     */
     async init() {
-        
         const servicio = new TableroDentroService(this.#privateApiyURL);
         const tableros = await servicio.getColumnNames();
         var obtenerIdBoard = location.search;
@@ -31,6 +48,11 @@ export class TableroDentroController {
 
     }  
     
+
+    /**
+     * El async delete se encarga de eliminar una tarea
+     * @param {*} id 
+     */
     async delete(id){
         const servicio = new TableroDentroService(this.#privateApiyURL);
         await servicio.deleteTask(id);
@@ -45,6 +67,14 @@ export class TableroDentroController {
         })
 
     }
+
+    /**
+     * async create se encarga de crear una tarea
+     * @param nombreTarea 
+     * @param descripcion 
+     * @param idTablero 
+     * @param idColumna 
+     */
     async create(nombreTarea,descripcion,idTablero,idColumna){
         
         if(nombreTarea == ""){
@@ -62,9 +92,11 @@ export class TableroDentroController {
                 "description":descripcion,
                 "create": new Date().toISOString()
             };
-            await servicio.createTask(data);
-        
 
+            /**
+             * await servicio.createTask(data) se encarga de crear la tarea
+             */
+            await servicio.createTask(data);
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -77,9 +109,20 @@ export class TableroDentroController {
         }
     }
 
+
+    /**
+     * async mover se encarga de mover una tarea a otra columna
+     * @param {*} idColumn 
+     * @param {*} idTablero 
+     * @param {*} name 
+     * @param {*} descripcion 
+     * @param {*} fechaCreacion 
+     * @param {*} id 
+     */
     async mover(idColumn,idTablero,name,descripcion,fechaCreacion,id){
         const servicio = new TableroDentroService(this.#privateApiyURL);
 
+        
         let data = {
             "idColumn":idColumn,
             "idBoard":idTablero,
@@ -103,6 +146,16 @@ export class TableroDentroController {
         }
     }
 
+
+    /**
+     * async updateTarea se encarga de actualizar una tarea
+     * @param {*} idColumn 
+     * @param {*} idTablero 
+     * @param {*} name 
+     * @param {*} descripcion 
+     * @param {*} fechaCreacion 
+     * @param {*} id 
+     */
     async updateTarea (idColumn,idTablero,name,descripcion,fechaCreacion,id){
         const servicio = new TableroDentroService(this.#privateApiyURL);
         let data = {
@@ -120,7 +173,7 @@ export class TableroDentroController {
             showConfirmButton: false,
             timer: 1300
         }).then(() => {
-           window.location.reload()
+            window.location.reload()
         })
     }
 }

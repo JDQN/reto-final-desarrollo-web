@@ -12,18 +12,20 @@ export class TableroDentroView {
     }
 
     /**
-     * 
+     * init - Inicializa el tablero dentro de una columna
      * @param {} tableros 
      */
     init(columnas,tasks,idTablero) {
         const controlador = new TableroDentroController();
-        
-       
 
 
         var numeroColumnas = columnas.length;
         this.#privateMostroarColumnas(columnas,idTablero);
 
+        /**
+         * Qui creoamos un div para cada tarea
+         * @param {} tasks
+         */
         tasks.forEach((task)=>{
             var idColumn = task.IdColumn;
             var divColumna = document.getElementById(idColumn);
@@ -32,10 +34,11 @@ export class TableroDentroView {
             tareaDiv.id = "tarea"+task.Id;
             tareaDiv.classList.add('task');
             
-            
             this.#privatemostrarInformacionGeneralTarea(tareaDiv, task);
             
-            /// opciones que permiten edtitar la tarea e inicialmente estan ocultos
+            /**
+             * opciones que permiten edtitar la tarea e inicialmente estan ocultos
+             */
             const buttonAbrir =this.#privateCreacionElementosEditarTarea(tareaDiv, task,idColumn,idTablero);
 
             
@@ -44,12 +47,12 @@ export class TableroDentroView {
             const divBotones = document.createElement("div");
             divBotones.classList.add("divBotones","btn-group", "btn-group-md");
 
+
             /* Boton Eliminar Tarea */
             const buttonEliminar = this.#privateCreateButton();
             buttonEliminar.classList.add('btn', 'btn-danger');
             buttonEliminar.innerHTML = `<i class="bi bi-trash"></i>`;
             buttonEliminar.addEventListener("click",() => {controlador.delete(task.Id);});
-
 
             this.#privateMoverTarea(divBotones,buttonAbrir,buttonEliminar,task,idColumn,idTablero,numeroColumnas);
             
@@ -58,7 +61,11 @@ export class TableroDentroView {
         });             
     }
 
-
+    /**
+     * #privateMostroarColumnas - Muestra las columnas en el tablero
+     * @param {*} columnas 
+     * @param {*} idTablero 
+     */
     #privateMostroarColumnas(columnas,idTablero){
 
         const botonVolver = document.createElement("button");
@@ -72,6 +79,11 @@ export class TableroDentroView {
         divVolver.append(botonVolver);
         this.#privateBody.append(divVolver);
 
+
+        /**
+         * Aqui creamos un div para cada columna 
+         * @param {*} columnas
+         */
         columnas.forEach((element)=>{
             const controlador = new TableroDentroController();
 
@@ -108,6 +120,12 @@ export class TableroDentroView {
             this.#privateBody.append(div);
         });
     }
+
+    /**
+     * #privateMostrarInformacionGeneralTarea - Muestra la informacion general de la tarea
+     * @param {*} tareaDiv 
+     * @param {*} task 
+     */
     #privatemostrarInformacionGeneralTarea(tareaDiv, task){
 
         /* Contenido de la Crad */
@@ -128,6 +146,15 @@ export class TableroDentroView {
         tareaDiv.append(nombreTarea,descripcionTarea,fechaCreacionTarea);
     }
 
+
+    /**
+     * #privateCreacionElementosEditarTarea - Crea los elementos para editar la tarea
+     * @param {*} tareaDiv 
+     * @param {*} task 
+     * @param {*} idColumn 
+     * @param {*} idTablero 
+     * @returns 
+     */
     #privateCreacionElementosEditarTarea(tareaDiv, task,idColumn,idTablero){
         const controlador = new TableroDentroController();
 
@@ -172,6 +199,17 @@ export class TableroDentroView {
         return buttonAbrir;
     }
 
+
+    /**
+     * #privateCreacionElementosEliminarTarea - Crea los elementos para eliminar la tarea
+     * @param {*} divBotones 
+     * @param {*} buttonAbrir 
+     * @param {*} buttonEliminar 
+     * @param {*} task 
+     * @param {*} idColumn 
+     * @param {*} idTablero 
+     * @param {*} numeroColumnas 
+     */
     #privateMoverTarea(divBotones, buttonAbrir,buttonEliminar,task,idColumn,idTablero, numeroColumnas){
         if(idColumn-1 == 0)
         {
@@ -187,9 +225,16 @@ export class TableroDentroView {
             const buttonMoverIzquierda = this.#privateMoverIzquierda(task, idColumn,idTablero);            
             divBotones.append(buttonMoverIzquierda,buttonAbrir,buttonEliminar,buttonMoverDerecha);
         }
-
     }
 
+
+    /**
+     * #privateMoverIzquierda - Crea el boton para mover la tarea a la izquierda
+     * @param {*} task 
+     * @param {*} idColumn 
+     * @param {*} idTablero 
+     * @returns 
+     */
     #privateMoverIzquierda(task, idColumn,idTablero){
         const controlador = new TableroDentroController();
         const buttonMoverIzquierda = this.#privateCreateButton();
@@ -204,6 +249,15 @@ export class TableroDentroView {
         });
         return buttonMoverIzquierda;
     }
+
+
+    /**
+     * #privateMoverDerecha - Crea el boton para mover la tarea a la derecha
+     * @param {*} task 
+     * @param {*} idColumn 
+     * @param {*} idTablero 
+     * @returns 
+     */
     #privateMoverDerecha(task, idColumn,idTablero){
         const controlador = new TableroDentroController();
         const buttonMoverDerecha = this.#privateCreateButton();
@@ -216,12 +270,15 @@ export class TableroDentroView {
             var descripcion = task.DescripcionTarea;
             var fechaCreacion = task.FechaCreacionTarea;
             controlador.mover(idColumn+1,idTablero,name,descripcion,fechaCreacion,task.Id);
-        
         });
         return buttonMoverDerecha;
-
     }
 
+    /**
+     * #privateCreateCard - Crea la tarjeta de la tarea
+     * #privateCreateButton - Crea un boton
+     * #privateCreateTitle - Crea el titulo de la tarjeta
+     */
     #privateCreateCard() {
         return document.createElement('div');
     }

@@ -2,6 +2,10 @@
 import { TablerosController} from "../controller/tableros.controler.mjs";
 import { Config } from "../config.mjs";
 
+
+/**
+ * @class TablerosService 
+ */
 export class TablerosView {
 
     #privateBody;
@@ -11,19 +15,29 @@ export class TablerosView {
         this.#privateBody = document.querySelector('body');
     }
 
+    /**
+     * init se encarga de inicializar el servicio
+     * @param {*} tableros 
+     */
     init(tableros) {
         var card = this.#privateMenuCrearTableros();
         this.#privateBody.append(card);
 
-
+        /**
+         * tableros es un array de objetos que contiene los tableros
+         */
         tableros.forEach((tablero)=>{
-            
             var card = this.#privateMostrarTableros(tablero);
             this.#privateBody.append(card);
 
         });
     }
 
+
+    /**
+     * #privateMenuCrearTableros se encarga de crear el menu de crear tableros
+     * @returns 
+     */
     #privateMenuCrearTableros(){
         const controlador = new TablerosController();
         
@@ -46,13 +60,17 @@ export class TablerosView {
         buttonCreate.classList.add('btn', 'btn-primary', 'd-grid', 'gap-2', 'col-9', 'mx-auto');
         buttonCreate.textContent = 'Crear Tablero';
         buttonCreate.addEventListener("click",() => {const text = document.getElementById("create").value; controlador.create(text); })
-
         card.append(title,input,buttonCreate);
-
         return card;
         
     }
 
+
+    /**
+     * #privateMostrarTableros se encarga de mostrar los tableros
+     * @param {*} tablero 
+     * @returns 
+     */
     #privateMostrarTableros(tablero){
         const controlador = new TablerosController();
 
@@ -71,6 +89,7 @@ export class TablerosView {
 
         const container = document.createElement('container');
         container.classList.add("btn-group", "btn-group-md");
+
 
         /* Boton Abrir tablero */
         const buttonAbrir = this.#privateCreateButton();
@@ -99,7 +118,12 @@ export class TablerosView {
     }
 
 
-
+    /**
+     * #privateCreateCard se encarga de crear una tarjeta
+     * #privateCreateButton se encarga de crear un boton
+     * #privateCreateTitle se encarga de crear un titulo
+     * @returns 
+     */
     #privateCreateCard() {
         return document.createElement('section');
     }
