@@ -20,7 +20,7 @@
 <h3>🛠 Tech Stack</h3>
 
 - ☕ &nbsp; Java Sprint Boot | MVC
-- ☕ &nbsp; Fronted realizado desde el DOM y Bootstrap | MVC
+- ☕ &nbsp; Front-end  realizado mediante DOM y Bootstrap | MVC
 
 <h3>👨‍💻 Instruciones</h3>
 
@@ -32,7 +32,7 @@ Para el despliege en local  del server se necesita lo siguiente:
 - posteriormente lanzar el servidor.
 - Importante en el proyecto hay un archivo llamado trello.postman_collection lo puede abrir en potsman y hay encontrara los endpoints 
 
-Para la parte del front se debe de tener en cuenta lo siguiente:
+Para la parte del front-end  se debe de tener en cuenta lo siguiente:
 
 - Tener instalado la extension live server y lanzar la aplicacion para el consumo de la api.
 ademas se debe tener en cuenta en el archivo config.mjs teniendo en cuenta que en la variable API_URL se debe poner el puerto que este configurado en el server, que por defecto es el 8080  en algunos casos 9090 
